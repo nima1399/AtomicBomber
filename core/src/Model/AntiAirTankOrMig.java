@@ -5,23 +5,23 @@ import com.badlogic.gdx.Gdx;
 
 public class AntiAirTankOrMig extends EnemyObjects {
     private boolean xIsLessThanAirplane;
-
+    boolean isMig = false;
     public AntiAirTankOrMig(float x, float y, float xSpeed, String texturePath, int killScore) {
-        super(texturePath, x, y, 4f, xSpeed, "bigblast4.png", killScore);
+        super(texturePath, x, y, 4f, xSpeed, Airplane.getExplodedAnimation(), killScore);
         if (killScore == 5) {
             if (Airplane.getAirplane().getX() < x) {
                 xIsLessThanAirplane = true;
                 textureRegion.flip(true, false);
-            } else {
-                xIsLessThanAirplane = false;
             }
+        } else {
+            isMig = true;
         }
     }
 
     @Override
     public void update(float delta) {
         x += xSpeed * delta;
-        if (killScore == 5) {
+        if (!isMig) {
             if (x < 0 || x >= Gdx.graphics.getWidth() - width) {
                 xSpeed *= -1;
             }

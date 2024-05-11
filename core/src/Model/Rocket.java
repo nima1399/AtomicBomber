@@ -1,7 +1,7 @@
 package Model;
 
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 
 public class Rocket {
     private static Rocket rocket;
@@ -9,12 +9,13 @@ public class Rocket {
     private float y;
     private int width;
     private int height;
-    private Texture texture;
+    private Animation<Texture> texture;
     private float xSpeed;
     private float ySpeed;
     private boolean isExploded;
     private Airplane airplane = Airplane.getAirplane();
     private float explosionTimer;
+    private boolean enemyHit = false;
 
     private Rocket() {
         x = airplane.getX() + airplane.getWidth() / 2;
@@ -34,8 +35,8 @@ public class Rocket {
     public static Rocket spawnRocket() {
         rocket = new Rocket();
         rocket.loadTexture();
-        rocket.setHeight(rocket.getTexture().getHeight());
-        rocket.setWidth(rocket.getTexture().getWidth());
+        rocket.setHeight(rocket.getTexture().getKeyFrame(0).getHeight() * 2);
+        rocket.setWidth(rocket.getTexture().getKeyFrame(0).getWidth() * 2);
         return rocket;
     }
 
@@ -71,12 +72,11 @@ public class Rocket {
         this.height = height;
     }
 
-    public Texture getTexture() {
+    public Animation<Texture> getTexture() {
         return texture;
     }
 
     public void dispose() {
-        texture.dispose();
         rocket = null;
     }
 
@@ -93,11 +93,11 @@ public class Rocket {
     }
 
     public void setExploded() {
-        this.texture = new Texture("bigblast3.png");
+        this.texture = getExplosionAnimation();
         this.x += this.width / 2;
         this.y += this.height / 2;
-        this.width = texture.getWidth() * 2;
-        this.height = texture.getHeight() * 2;
+        this.width = texture.getKeyFrame(0).getWidth() * 2;
+        this.height = texture.getKeyFrame(0).getHeight() * 2;
         this.x -= this.width / 2;
         this.y -= this.height / 2;
         if (y < 170)
@@ -105,13 +105,17 @@ public class Rocket {
         this.isExploded = true;
     }
 
+    public boolean isEnemyHit() {
+        return enemyHit;
+    }
+
+    public void setEnemyHit() {
+        enemyHit = true;
+    }
+
     public void loadTexture() {
-        int diameter = 30;
-        Pixmap pixmap = new Pixmap(diameter, diameter, Pixmap.Format.RGBA8888);
-        pixmap.setColor(0, 0, 0, 1);
-        pixmap.fillCircle(diameter / 2, diameter / 2, diameter / 2);
-        texture = new Texture(pixmap);
-        pixmap.dispose();
+        texture = new Animation<>(0.1f, new Texture("rocket1.png"));
+        texture.setPlayMode(Animation.PlayMode.LOOP);
     }
 
 
@@ -131,4 +135,11 @@ public class Rocket {
         this.ySpeed = ySpeed;
     }
 
+    public Animation<Texture> getExplosionAnimation() {
+        return new Animation<>(0.1f, new Texture("bigblast1.png"), new Texture("bigblast2.png"), new Texture("bigblast3.png"), new Texture("bigblast4.png"));
+    }
+
+    public float getElapsedTime() {
+        return explosionTimer;
+    }
 }

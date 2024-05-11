@@ -1,30 +1,16 @@
 package Controller;
 
-import Model.Airplane;
-import View.FirstGameScreen;
 import View.LoginMenuScreen;
-import View.MainMenuGameScreen;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.Align;
-
-import java.awt.*;
-import java.time.temporal.Temporal;
 
 
-
-public class AtomicBomber extends Game{
+public class AtomicBomber extends Game {
     int fpsPassed = 60;
     Batch batch;
     Texture background;
@@ -37,9 +23,7 @@ public class AtomicBomber extends Game{
         setScreen(new LoginMenuScreen());
         batch = new SpriteBatch();
         background = new Texture("sky.png");
-        music = Gdx.audio.newMusic(Gdx.files.internal("music\\sb_indreams(chosic.com).mp3"));
-        music.setLooping(true);
-        music.play();
+        GameUtility.setMusic("music\\sb_indreams(chosic.com).mp3");
         green = new ShapeRenderer();
         black = new ShapeRenderer();
     }

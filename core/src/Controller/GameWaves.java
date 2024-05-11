@@ -2,13 +2,12 @@ package Controller;
 
 import Model.*;
 import View.AfterGameScreen;
+import View.FirstGameScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 
-import java.util.Iterator;
-
 public class GameWaves {
-    private int wave = 1;
+    private int wave = 0;
     private static GameWaves gameWaves;
 
     public GameWaves() {
@@ -41,14 +40,25 @@ public class GameWaves {
     public void goToNextWave() {
         wave++;
         EnemyObjects.getEnemyObjects().clear();
-        spawnEnemies();
-        if (wave == 2) {
-            new AntiAirTankOrMig(900, 170, 70f, "zsu57.png", 5);
-        } else if (wave == 3) {
-            new AntiAirTankOrMig(900, 1000, -200f, "mig1.png", 6);
-        } else {
-            wave = 3;
-            ((Game) Gdx.app.getApplicationListener()).setScreen(new AfterGameScreen());
+
+
+        switch (wave) {
+            case 1:
+                spawnEnemies();
+                break;
+            case 2:
+                spawnEnemies();
+                FirstGameScreen.setWaveFinished();
+                new AntiAirTankOrMig(900, 170, 70f, "zsu57.png", 5);
+                break;
+            case 3:
+                spawnEnemies();
+                FirstGameScreen.setWaveFinished();
+                new AntiAirTankOrMig(900, 1000, -200f, "mig1.png", 6);
+                break;
+            default:
+                wave = 3;
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new AfterGameScreen());
         }
     }
 }

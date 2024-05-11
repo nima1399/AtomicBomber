@@ -3,16 +3,11 @@ package View;
 import Controller.DataBaseCommands;
 import Controller.GameWaves;
 import Model.Airplane;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class AfterGameScreen implements Screen {
     Stage stage;
@@ -35,10 +30,12 @@ public class AfterGameScreen implements Screen {
         UIBlocks.textButtonMaker(hasWon, skin, root);
         UIBlocks.textButtonMaker("Last Wave: " + GameWaves.getGameWaves().getWave(), skin, root);
         UIBlocks.textButtonMaker("Kills: " + DataBaseCommands.getKills(), skin, root);
+        UIBlocks.textButtonMaker("Accuracy: " + Airplane.getAirplane().getAccuracy() + "%", skin, root);
         UIBlocks.navigationTextButtonMaker("Go Back To Main-menu", skin, root, "MainMenuGameScreen");
 
         Gdx.input.setInputProcessor(stage);
     }
+
     @Override
     public void render(float delta) {
         stage.act();

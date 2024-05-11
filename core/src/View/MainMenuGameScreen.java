@@ -1,7 +1,6 @@
 package View;
 
 import Controller.DataBaseCommands;
-import Model.Airplane;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;

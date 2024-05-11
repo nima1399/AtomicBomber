@@ -2,6 +2,7 @@ package Model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.ArrayList;
@@ -16,14 +17,14 @@ public abstract class EnemyObjects {
     protected int height;
     protected float multiplier;
     protected Texture texture;
-    protected Texture fireTexture;
+    protected Animation fireTexture;
     protected TextureRegion textureRegion;
     protected float xSpeed;
     protected boolean isExploded = false;
     protected float explosionTimer = 0;
     protected int killScore;
 
-    public EnemyObjects(String texturePath, float x, float y, float multiplier, float xSpeed, String fireTexturePath, int killScore) {
+    public EnemyObjects(String texturePath, float x, float y, float multiplier, float xSpeed, Animation deathAnimation, int killScore) {
         enemyObjects.add(this);
         this.x = x;
         this.y = y;
@@ -34,8 +35,8 @@ public abstract class EnemyObjects {
             textureRegion.flip(true, false);
         this.width = (int) (texture.getWidth() * multiplier);
         this.height = (int) (texture.getHeight() * multiplier);
-        if (fireTexturePath != null) {
-            fireTexture = new Texture(fireTexturePath);
+        if (deathAnimation != null) {
+            fireTexture = deathAnimation;
         }
         this.killScore = killScore;
     }
@@ -78,8 +79,6 @@ public abstract class EnemyObjects {
 
     public void dispose() {
         texture.dispose();
-        if (fireTexture != null)
-            fireTexture.dispose();
         textureRegion.getTexture().dispose();
         enemyObjects.remove(this);
     }
@@ -109,7 +108,7 @@ public abstract class EnemyObjects {
             dispose();
             return;
         }
-        textureRegion = new TextureRegion(fireTexture);
+        textureRegion = new TextureRegion((Texture) fireTexture.getKeyFrame(explosionTimer));
         xSpeed = 0;
         isExploded = true;
     }
@@ -118,6 +117,7 @@ public abstract class EnemyObjects {
         explosionTimer += delta;
         if (explosionTimer >= 1)
             dispose();
+        textureRegion = new TextureRegion((Texture) fireTexture.getKeyFrame(explosionTimer));
     }
 
     public int getKillScore() {

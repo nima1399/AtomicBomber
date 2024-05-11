@@ -4,15 +4,29 @@ import Model.Tank;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
 
 public class GameUtility {
+    private static Music music;
+
+    public static void setMusic(String musicPath) {
+        if (music != null)
+            music.stop();
+        music = Gdx.audio.newMusic(Gdx.files.internal(musicPath));
+        music.setLooping(true);
+        music.play();
+    }
+
     public static void toggleMute() {
-        AtomicBomber atomicBomber = (AtomicBomber) Gdx.app.getApplicationListener();
-        if (atomicBomber.music.isPlaying()) {
-            atomicBomber.music.pause();
+        if (music.isPlaying()) {
+            music.pause();
         } else {
-            atomicBomber.music.play();
+            music.play();
         }
+    }
+
+    public static void muteMusic() {
+        music.stop();
     }
 
     public static void fullScreenToggle(int fpsPassed) {

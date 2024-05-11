@@ -4,7 +4,7 @@ import View.AfterGameScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.Animation;
 
 
 public class Airplane {
@@ -13,14 +13,16 @@ public class Airplane {
     private float y = 500;
     private int width = 0;
     private int height = 0;
-    private Texture texture;
-    private Texture planeTexture;
-    private Texture explodedTexture;
+    private Animation<Texture> texture;
+    private Animation<Texture> planeTexture;
+    private Animation<Texture> explodedTexture;
     private float xSpeed = 0;
     private float ySpeed = 0;
     private int hp = 2;
     private boolean isExploded = false;
     private float explosionTimer = 0;
+    private int totalShots = 0;
+    private int successfulShots = 0;
 
     public Airplane() {
         Airplane.airplane = this;
@@ -63,20 +65,21 @@ public class Airplane {
     }
 
     public Texture getTexture() {
-        return texture;
+        return texture.getKeyFrame(explosionTimer);
+    }
+
+    public static Animation getExplodedAnimation() {
+        return airplane.explodedTexture;
     }
 
     public void dispose() {
-        texture.dispose();
-        planeTexture.dispose();
-        explodedTexture.dispose();
         airplane = null;
     }
 
     public void loadTexture() {
-        planeTexture = new Texture("plane.png");
+        planeTexture = new Animation<>(1f, new Texture("plane.png"));
         texture = planeTexture;
-        explodedTexture = new Texture("fire1.png");
+        explodedTexture = new Animation<>(0.4f, new Texture("fire1.png"), new Texture("fire2.png"), new Texture("fire3.png"));
     }
 
     public float getXSpeed() {
@@ -113,11 +116,34 @@ public class Airplane {
 
     public void setExploded() {
         texture = explodedTexture;
-        width = texture.getWidth() * 5;
-        height = texture.getHeight() * 5;
+        width = texture.getKeyFrame(0).getWidth() * 5;
+        height = texture.getKeyFrame(0).getHeight() * 5;
         xSpeed = 0;
         ySpeed = 0;
         isExploded = true;
+    }
+
+    public void setTotalShots(int totalShots) {
+        this.totalShots = totalShots;
+    }
+
+    public int getTotalShots() {
+        return totalShots;
+    }
+
+    public void setSuccessfulShots(int successfulShots) {
+        this.successfulShots = successfulShots;
+    }
+
+    public int getSuccessfulShots() {
+        return successfulShots;
+    }
+
+    public int getAccuracy() {
+        if (totalShots == 0) {
+            return 0;
+        }
+        return successfulShots * 100 / totalShots;
     }
 
     public void updateExplosionTimer(float delta) {
@@ -129,8 +155,8 @@ public class Airplane {
                 y = 500;
                 isExploded = false;
                 texture = planeTexture;
-                width = texture.getWidth() * 5;
-                height = texture.getHeight() * 5;
+                width = texture.getKeyFrame(0).getWidth() * 5;
+                height = texture.getKeyFrame(0).getHeight() * 5;
                 explosionTimer = 0;
             } else {
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new AfterGameScreen());

@@ -41,6 +41,7 @@ public class Bullet {
         float distance = (float) Math.sqrt((targetX - x) * (targetX - x) + (targetY - y) * (targetY - y));
         this.dx = (targetX - x) / distance;
         this.dy = (targetY - y) / distance;
+        sprite.setRotation((float) Math.toDegrees(Math.atan2(dy, dx)));
     }
 
     public void update(float delta) {

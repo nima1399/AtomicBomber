@@ -2,13 +2,18 @@ package Controller;
 
 import Model.Airplane;
 import Model.Rocket;
+import View.PauseGameScreen;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class UserObjectsController {
 
 
-    public static void keyPress(float delta, Airplane airplane) {
+    public static void keyPress(float delta, Airplane airplane, Batch batch) {
         if (!airplane.getIsExploded()) {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 airplane.setXSpeed(airplane.getXSpeed() - 10 * delta);
@@ -36,7 +41,7 @@ public class UserObjectsController {
                 Rocket.spawnRocket();
             }
         }
-        processRocket(delta);
+        processRocket(delta, batch);
 
         airplane.setX(airplane.getX() + airplane.getXSpeed());
         airplane.setY(airplane.getY() + airplane.getYSpeed());
@@ -62,11 +67,13 @@ public class UserObjectsController {
             if (airplane.getHp() == 1) {
                 airplane.setHp(2);
             }
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            ((Game) Gdx.app.getApplicationListener()).setScreen(new PauseGameScreen());
         }
 
     }
 
-    private static void processRocket(float delta) {
+    private static void processRocket(float delta, Batch batch) {
         Rocket rocket = Rocket.getRocket();
         if (rocket == null)
             return;
@@ -75,14 +82,29 @@ public class UserObjectsController {
             rocket.setX(rocket.getX() + rocket.getXSpeed());
             rocket.setYSpeed(rocket.getYSpeed() - 10 * delta);
             rocket.setY(rocket.getY() + rocket.getYSpeed());
+
+            float angle = (float) Math.atan2(rocket.getYSpeed(), rocket.getXSpeed());
+            Sprite sprite = new Sprite(rocket.getTexture().getKeyFrame(0));
+            sprite.setPosition(rocket.getX(), rocket.getY());
+            sprite.setRotation((float) Math.toDegrees(angle));
+            sprite.setScale(2);
+            sprite.draw(batch);
+        } else {
+            Texture currentFrame = rocket.getTexture().getKeyFrame(rocket.getElapsedTime(), true);
+            batch.draw(currentFrame, rocket.getX(), rocket.getY(), rocket.getWidth(), rocket.getHeight());
         }
 
         if (rocket.getY() <= 170 && !rocket.isExploded())
             rocket.setExploded();
         else if (rocket.isExploded()) {
             rocket.setExplosionTimer(rocket.getExplosionTimer() + delta);
-            if (rocket.getExplosionTimer() >= 0.5)
+            if (rocket.getExplosionTimer() >= 0.5) {
+                Airplane airplane = Airplane.getAirplane();
+                if (rocket.isEnemyHit())
+                    airplane.setSuccessfulShots(airplane.getSuccessfulShots() + 1);
+                airplane.setTotalShots(airplane.getTotalShots() + 1);
                 rocket.dispose();
+            }
         }
     }
 }
