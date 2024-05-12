@@ -24,6 +24,8 @@ public class FirstGameScreen implements Screen {
     private float waveFinishedTimer = 0;
     private BitmapFont font;
     Bullet bullet;
+    float timePassed = 0;
+    float migTime = (float) 2.5 * (5 - DataBaseCommands.getDifficulty());
 
     @Override
     public void show() {
@@ -65,20 +67,28 @@ public class FirstGameScreen implements Screen {
             bullet.draw(batch);
         }
         boolean enemyObjectsExist = false;
-        AntiAirTankOrMig antiAirTankOrMig = null;
+        Mig mig = null;
         for (EnemyObjects enemyObjects : EnemyObjects.getEnemyObjects()) {
-            if (!(enemyObjects instanceof AntiAirTankOrMig)) {
+            if (!(enemyObjects instanceof Mig)) {
                 batch.draw(enemyObjects.getTextureRegion(), enemyObjects.getX(), enemyObjects.getY(), enemyObjects.getWidth(), enemyObjects.getHeight());
                 enemyObjects.update(delta);
                 enemyObjectsExist = true;
             } else {
-                antiAirTankOrMig = (AntiAirTankOrMig) enemyObjects;
+                mig = (Mig) enemyObjects;
             }
         }
-        if (antiAirTankOrMig != null) {
-            batch.draw(antiAirTankOrMig.getTextureRegion(), antiAirTankOrMig.getX(), antiAirTankOrMig.getY(), antiAirTankOrMig.getWidth(), antiAirTankOrMig.getHeight());
-            antiAirTankOrMig.update(delta);
+        if (mig != null) {
+            batch.draw(mig.getTextureRegion(), mig.getX(), mig.getY(), mig.getWidth(), mig.getHeight());
+            mig.update(delta);
             enemyObjectsExist = true;
+        } else if (GameWaves.getGameWaves().getWave() == 3){
+            timePassed += delta;
+            if (timePassed >= migTime) {
+                new Mig(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 2, -200, "mig1.png");
+                timePassed = 0;
+            }
+            if (timePassed >= migTime - 3)
+                font.draw(batch, "Mig Is Coming", Gdx.graphics.getWidth() / 2 - 200, Gdx.graphics.getHeight() / 2 + 200);
         }
         if (!enemyObjectsExist)
             gameWaves.goToNextWave();

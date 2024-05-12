@@ -41,6 +41,17 @@ public class KillingChecker {
                 rocket.setEnemyHit();
                 DataBaseCommands.setKills(DataBaseCommands.getKills() + enemy.getKillScore());
             }
+            ArrayList<Rocket> cluster = Rocket.getCluster();
+            if (cluster != null && cluster.size() > 0) {
+                for (Rocket rocket2 : cluster) {
+                    if (isOverlapping(enemy, rocket2) && !enemy.isExploded()) {
+                        enemy.setExploded();
+                        rocket2.setExploded();
+                        rocket2.setEnemyHit();
+                        DataBaseCommands.setKills(DataBaseCommands.getKills() + enemy.getKillScore());
+                    }
+                }
+            }
             if (enemy.isExploded())
                 enemy.updateExplosionTimer(delta);
         }

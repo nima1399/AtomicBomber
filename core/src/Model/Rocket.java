@@ -3,8 +3,11 @@ package Model;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 
+import java.util.ArrayList;
+
 public class Rocket {
-    private static Rocket rocket;
+    private static Rocket rocketInstance;
+    private static ArrayList<Rocket> clusterInstance;
     private float x;
     private float y;
     private int width;
@@ -17,27 +20,44 @@ public class Rocket {
     private float explosionTimer;
     private boolean enemyHit = false;
 
-    private Rocket() {
+    private Rocket(float xSpeed, float ySpeed) {
         x = airplane.getX() + airplane.getWidth() / 2;
         y = airplane.getY();
         width = 0;
         height = 0;
-        xSpeed = airplane.getXSpeed();
-        ySpeed = airplane.getYSpeed();
+        this.xSpeed = xSpeed;
+        this.ySpeed = ySpeed;
         isExploded = false;
         explosionTimer = 0;
     }
 
     public static Rocket getRocket() {
-        return rocket;
+        return rocketInstance;
     }
 
-    public static Rocket spawnRocket() {
-        rocket = new Rocket();
+    public static Rocket spawnRocket(float xSpeed, float ySpeed) {
+        Rocket rocket = new Rocket(xSpeed, ySpeed);
         rocket.loadTexture();
         rocket.setHeight(rocket.getTexture().getKeyFrame(0).getHeight() * 2);
         rocket.setWidth(rocket.getTexture().getKeyFrame(0).getWidth() * 2);
         return rocket;
+    }
+
+    public static ArrayList<Rocket> getCluster() {
+        return clusterInstance;
+    }
+
+    public static ArrayList<Rocket> spawnCluster() {
+        ArrayList<Rocket> cluster = new ArrayList<>();
+        Airplane airplane = Airplane.getAirplane();
+        for (int i = -4; i < 5; i += 2)
+            cluster.add(spawnRocket(airplane.getXSpeed() + i, airplane.getYSpeed()));
+        clusterInstance = cluster;
+        return cluster;
+    }
+
+    public static void setRocket(Rocket rocket) {
+        Rocket.rocketInstance = rocket;
     }
 
     public float getX() {
@@ -77,7 +97,10 @@ public class Rocket {
     }
 
     public void dispose() {
-        rocket = null;
+        if (this == rocketInstance)
+            rocketInstance = null;
+        if (clusterInstance != null)
+            clusterInstance.remove(this);
     }
 
     public float getExplosionTimer() {

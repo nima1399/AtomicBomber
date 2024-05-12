@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class UserObjectsController {
 
 
@@ -38,10 +41,24 @@ public class UserObjectsController {
                 }
             }
             if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && Rocket.getRocket() == null) {
-                Rocket.spawnRocket();
+                Rocket rocket = Rocket.spawnRocket(airplane.getXSpeed(), airplane.getYSpeed());
+                Rocket.setRocket(rocket);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.C) && (Rocket.getCluster() == null || Rocket.getCluster().size() == 0)) {
+                Rocket.spawnCluster();
             }
         }
-        processRocket(delta, batch);
+        if (processRocket(delta, batch, Rocket.getRocket()))
+            Rocket.getRocket().dispose();
+        ArrayList<Rocket> toRemove = new ArrayList<>();
+        if (Rocket.getCluster() != null) {
+            for (Rocket rocket : Rocket.getCluster()) {
+                if (processRocket(delta, batch, rocket))
+                    toRemove.add(rocket);
+            }
+        }
+        if (Rocket.getCluster() != null && toRemove.size() > 0)
+            Rocket.getCluster().removeAll(toRemove);
 
         airplane.setX(airplane.getX() + airplane.getXSpeed());
         airplane.setY(airplane.getY() + airplane.getYSpeed());
@@ -73,10 +90,9 @@ public class UserObjectsController {
 
     }
 
-    private static void processRocket(float delta, Batch batch) {
-        Rocket rocket = Rocket.getRocket();
+    private static Boolean processRocket(float delta, Batch batch, Rocket rocket) {
         if (rocket == null)
-            return;
+            return false;
 
         if (!rocket.isExploded()) {
             rocket.setX(rocket.getX() + rocket.getXSpeed());
@@ -100,11 +116,13 @@ public class UserObjectsController {
             rocket.setExplosionTimer(rocket.getExplosionTimer() + delta);
             if (rocket.getExplosionTimer() >= 0.5) {
                 Airplane airplane = Airplane.getAirplane();
-                if (rocket.isEnemyHit())
+                if (rocket.isEnemyHit()) {
                     airplane.setSuccessfulShots(airplane.getSuccessfulShots() + 1);
+                }
                 airplane.setTotalShots(airplane.getTotalShots() + 1);
-                rocket.dispose();
+                return true;
             }
         }
+        return false;
     }
 }

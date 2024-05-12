@@ -49,12 +49,12 @@ public class GameWaves {
             case 2:
                 spawnEnemies();
                 FirstGameScreen.setWaveFinished();
-                new AntiAirTankOrMig(900, 170, 70f, "zsu57.png", 5);
+                new AntiAirTank(900, 170, 70f, "zsu57.png");
                 break;
             case 3:
                 spawnEnemies();
                 FirstGameScreen.setWaveFinished();
-                new AntiAirTankOrMig(900, 1000, -200f, "mig1.png", 6);
+//                new Mig(900, 1000, -200f, "mig1.png");
                 break;
             default:
                 wave = 3;
