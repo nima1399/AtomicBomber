@@ -26,6 +26,8 @@ public class FirstGameScreen implements Screen {
     Bullet bullet;
     float timePassed = 0;
     float migTime = (float) 2.5 * (5 - DataBaseCommands.getDifficulty());
+    FreezeBar freezeBar;
+    boolean isFreeze;
 
     @Override
     public void show() {
@@ -42,6 +44,8 @@ public class FirstGameScreen implements Screen {
         font.setColor(Color.WHITE);
         font.getData().setScale(5);
         waveFinished = false;
+        freezeBar = new FreezeBar();
+        isFreeze = FreezeBar.getFreezeBar().getFreeze();
     }
 
     @Override
@@ -71,7 +75,8 @@ public class FirstGameScreen implements Screen {
         for (EnemyObjects enemyObjects : EnemyObjects.getEnemyObjects()) {
             if (!(enemyObjects instanceof Mig)) {
                 batch.draw(enemyObjects.getTextureRegion(), enemyObjects.getX(), enemyObjects.getY(), enemyObjects.getWidth(), enemyObjects.getHeight());
-                enemyObjects.update(delta);
+                if (!isFreeze)
+                    enemyObjects.update(delta);
                 enemyObjectsExist = true;
             } else {
                 mig = (Mig) enemyObjects;
@@ -79,9 +84,10 @@ public class FirstGameScreen implements Screen {
         }
         if (mig != null) {
             batch.draw(mig.getTextureRegion(), mig.getX(), mig.getY(), mig.getWidth(), mig.getHeight());
-            mig.update(delta);
+            if (!isFreeze)
+                mig.update(delta);
             enemyObjectsExist = true;
-        } else if (GameWaves.getGameWaves().getWave() == 3){
+        } else if (GameWaves.getGameWaves().getWave() == 3 && !isFreeze) {
             timePassed += delta;
             if (timePassed >= migTime) {
                 new Mig(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 2, -200, "mig1.png");
@@ -92,8 +98,12 @@ public class FirstGameScreen implements Screen {
         }
         if (!enemyObjectsExist)
             gameWaves.goToNextWave();
+
         processOverlap(delta);
+        freezeBar.render(batch);
+        freezeBar.update(delta);
         batch.end();
+        isFreeze = FreezeBar.getFreezeBar().getFreeze();
     }
 
     @Override

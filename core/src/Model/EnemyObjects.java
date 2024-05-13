@@ -15,7 +15,6 @@ public abstract class EnemyObjects {
     protected float y;
     protected int width;
     protected int height;
-    protected float multiplier;
     protected Texture texture;
     protected Animation fireTexture;
     protected TextureRegion textureRegion;

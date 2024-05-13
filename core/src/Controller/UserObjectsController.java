@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.Airplane;
+import Model.FreezeBar;
 import Model.Rocket;
 import View.PauseGameScreen;
 import com.badlogic.gdx.Game;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,8 +88,10 @@ public class UserObjectsController {
             }
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             ((Game) Gdx.app.getApplicationListener()).setScreen(new PauseGameScreen());
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
+            FreezeBar freezeBar = FreezeBar.getFreezeBar();
+            freezeBar.toggleFreeze();
         }
-
     }
 
     private static Boolean processRocket(float delta, Batch batch, Rocket rocket) {

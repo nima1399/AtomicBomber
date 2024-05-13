@@ -2,6 +2,7 @@ package Controller;
 
 import View.LoginMenuScreen;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -32,17 +33,17 @@ public class AtomicBomber extends Game {
         fpsPassed++;
         GameUtility.fullScreenToggle(fpsPassed);
         batch.begin();
-        batch.draw(background, 0, 0, 2736, 1824);
+        batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
 
         green.setColor(Color.GREEN);
         green.begin(ShapeRenderer.ShapeType.Filled);
-        green.rect(0, 0, 2736, 150);
+        green.rect(0, 0, Gdx.graphics.getWidth(), 150);
         green.end();
 
         black.setColor(Color.BLACK);
         black.begin(ShapeRenderer.ShapeType.Filled);
-        black.rect(0, 150, 2736, 20);
+        black.rect(0, 150, Gdx.graphics.getWidth(), 20);
         black.end();
 
         super.render();

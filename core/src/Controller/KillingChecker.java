@@ -27,6 +27,13 @@ public class KillingChecker {
         return enemyRect.overlaps(airplaneRect);
     }
 
+//    public static boolean isOverlapping(Bonus bonus, Airplane airplane) {
+//        Rectangle enemyRect = new Rectangle(bonus.getX(), bonus.getY(), bonus.getWidth(), bonus.getHeight());
+//        Rectangle airplaneRect = new Rectangle(airplane.getX(), airplane.getY(), airplane.getWidth(), airplane.getHeight());
+//
+//        return enemyRect.overlaps(airplaneRect);
+//    }
+
     public static void processOverlap(float delta) {
         ArrayList<EnemyObjects> enemyObjectsCopy = new ArrayList<EnemyObjects>(EnemyObjects.getEnemyObjects());
         for (EnemyObjects enemy : enemyObjectsCopy) {
@@ -59,5 +66,6 @@ public class KillingChecker {
         if (bullet != null && isOverlapping(bullet, Airplane.getAirplane())) {
             Airplane.getAirplane().setExploded();
         }
+
     }
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
 public class Airplane {
@@ -23,6 +24,8 @@ public class Airplane {
     private float explosionTimer = 0;
     private int totalShots = 0;
     private int successfulShots = 0;
+    private int clusterShots = 0;
+    private boolean faceRight = true;
 
     public Airplane() {
         Airplane.airplane = this;
@@ -146,6 +149,22 @@ public class Airplane {
         return successfulShots * 100 / totalShots;
     }
 
+    public int getClusterShots() {
+        return clusterShots;
+    }
+
+    public void setClusterShots(int clusterShots) {
+        this.clusterShots = clusterShots;
+    }
+
+    public boolean getFaceRight() {
+        return faceRight;
+    }
+
+    public void setFaceRight(boolean faceRight) {
+        this.faceRight = faceRight;
+    }
+
     public void updateExplosionTimer(float delta) {
         explosionTimer += delta;
         if (explosionTimer >= 1) {
@@ -163,4 +182,5 @@ public class Airplane {
             }
         }
     }
+
 }
