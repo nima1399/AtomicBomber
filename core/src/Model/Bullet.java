@@ -1,5 +1,6 @@
 package Model;
 
+import Controller.DataBaseCommands;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -9,7 +10,7 @@ public class Bullet {
     private static Bullet bullet = null;
     private float x, y;
     private float dx, dy;
-    private float speed = 1000f;
+    private float speed = 400f;
     private Sprite sprite;
 
     public Bullet(float x, float y, String texturePath) {
@@ -45,8 +46,8 @@ public class Bullet {
     }
 
     public void update(float delta) {
-        x += dx * speed * delta;
-        y += dy * speed * delta;
+        x += dx * speed * delta * DataBaseCommands.getDifficulty();
+        y += dy * speed * delta * DataBaseCommands.getDifficulty();
         if (x > Gdx.graphics.getWidth() || x < 0 || y > Gdx.graphics.getHeight() || y <= 170) {
             bullet.dispose();
         }

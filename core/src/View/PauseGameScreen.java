@@ -2,6 +2,9 @@ package View;
 
 import Controller.DataBaseCommands;
 import Controller.GameUtility;
+import Model.Bonus;
+import Model.Score;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -18,6 +21,7 @@ public class PauseGameScreen implements Screen {
 
     @Override
     public void show() {
+        Bonus.getBonusInstance().clear();
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
@@ -27,8 +31,24 @@ public class PauseGameScreen implements Screen {
 
         if (!DataBaseCommands.getUsername().equals("Guest")) {
             TextButton saveGame = UIBlocks.textButtonMaker("Save Game", skin, root);
+            saveGame.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    DataBaseCommands.saveGame();
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuGameScreen());
+                }
+            });
         }
         TextButton exitGame = UIBlocks.textButtonMaker("Exit Game", skin, root);
+        exitGame.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Score.dispose();
+                DataBaseCommands.deleteSave();
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuGameScreen());
+            }
+        });
+
 
         TextButton muteMusic = UIBlocks.textButtonMaker("Mute Music", skin, root);
         muteMusic.addListener(new ClickListener() {
@@ -43,7 +63,7 @@ public class PauseGameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Dialog dialog = new Dialog("Controls", skin);
-                dialog.text("Move: Arrow Keys\nShoot: Space\nPause: Esc\nRadioactive: R\nCluster: C\nFreeze: Tab");
+                dialog.text("Move: Arrow Keys or wasd\nShoot: Space\nPause: Esc\nRadioactive: R\nCluster: C\nFreeze: Tab");
                 dialog.button("OK");
                 dialog.show(stage);
             }

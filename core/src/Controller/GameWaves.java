@@ -27,17 +27,18 @@ public class GameWaves {
     }
 
     public void spawnEnemies() {
-        new Tank(1800, 70f, DataBaseCommands.getDifficulty());
-        new Tank(1200, -70f, DataBaseCommands.getDifficulty());
-        new Tank(300, 70f, DataBaseCommands.getDifficulty());
-        new Building(2000);
-        new Bunker(600);
-        new Truck(1000, 100f);
-        new Truck(1500, -100f);
-        new Tree(500);
+        new Tank((float) (Math.random() * Gdx.graphics.getWidth() - 300), 70f, DataBaseCommands.getDifficulty());
+        new Tank((float) (Math.random() * Gdx.graphics.getWidth() - 300), -70f, DataBaseCommands.getDifficulty());
+        new Tank((float) (Math.random() * Gdx.graphics.getWidth() - 300), 70f, DataBaseCommands.getDifficulty());
+        new Building((float) (Math.random() * Gdx.graphics.getWidth() - 300));
+        new Bunker((float) (Math.random() * Gdx.graphics.getWidth() - 300));
+        new Truck((float) (Math.random() * Gdx.graphics.getWidth() - 300), 100f);
+        new Truck((float) (Math.random() * Gdx.graphics.getWidth() - 300), -100f);
+        new Tree((float) (Math.random() * Gdx.graphics.getWidth() - 300));
     }
 
     public void goToNextWave() {
+        if (wave != 0) new Score();
         wave++;
         EnemyObjects.getEnemyObjects().clear();
 
@@ -49,12 +50,11 @@ public class GameWaves {
             case 2:
                 spawnEnemies();
                 FirstGameScreen.setWaveFinished();
-                new AntiAirTank(900, 170, 70f, "zsu57.png");
+                new AntiAirTank((float) (Math.random() * Gdx.graphics.getWidth() - 300), 170, 70f, "zsu57.png");
                 break;
             case 3:
                 spawnEnemies();
                 FirstGameScreen.setWaveFinished();
-//                new Mig(900, 1000, -200f, "mig1.png");
                 break;
             default:
                 wave = 3;

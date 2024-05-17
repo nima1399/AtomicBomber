@@ -10,10 +10,14 @@ public class GameUtility {
     private static Music music;
 
     public static void setMusic(String musicPath) {
-        if (music != null)
-            music.stop();
+        if (music != null) music.stop();
         music = Gdx.audio.newMusic(Gdx.files.internal(musicPath));
         music.setLooping(true);
+        music.play();
+    }
+
+    public static void playExplosionMusic() {
+        music = Gdx.audio.newMusic(Gdx.files.internal("music\\Explosion-chosic.com_.mp3"));
         music.play();
     }
 
@@ -41,9 +45,6 @@ public class GameUtility {
                 Gdx.graphics.setWindowedMode(2000, 1500);
             }
         }
-    }
-
-    public static void toggleTheme() {
     }
 
     public static void randomTankAdded() {

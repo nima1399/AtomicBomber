@@ -56,19 +56,21 @@ public class SettingsScreen implements Screen {
             }
         });
 
-        TextButton toggleTheme = UIBlocks.textButtonMaker("White / Black", skin, root);
-        toggleMute.addListener(new ClickListener() {
+        UIBlocks.textButtonMaker("White / Black", skin, root);
+
+        TextButton wasdControls = UIBlocks.textButtonMaker("WASD", skin, root);
+        wasdControls.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // todo: implement this
+                DataBaseCommands.setControls("wasd");
             }
         });
 
-        TextButton changeControls = UIBlocks.textButtonMaker("Change Controls", skin, root);
-        changeControls.addListener(new ClickListener() {
+        TextButton arrowControls = UIBlocks.textButtonMaker("Arrows", skin, root);
+        arrowControls.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // todo: implement this
+                DataBaseCommands.setControls("arrows");
             }
         });
 

@@ -27,8 +27,8 @@ public class ChangeUsernameOrPasswordScreen implements Screen {
         root.setFillParent(true);
         stage.addActor(root);
 
-        UIBlocks.textFieldMaker("Username", skin, root);
-        UIBlocks.textFieldMaker("Password", skin, root);
+        username = UIBlocks.textFieldMaker("Username", skin, root);
+        password = UIBlocks.textFieldMaker("Password", skin, root);
 
         ChangeUsernameAndPassword = UIBlocks.textButtonMaker("Change Username And Password", skin, root);
         ChangeUsernameAndPassword.addListener(new ClickListener() {

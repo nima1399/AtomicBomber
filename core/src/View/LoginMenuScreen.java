@@ -95,7 +95,7 @@ public class LoginMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
+        
         stage.act();
         stage.draw();
     }

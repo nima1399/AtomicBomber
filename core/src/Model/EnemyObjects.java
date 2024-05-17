@@ -30,8 +30,7 @@ public abstract class EnemyObjects {
         this.xSpeed = xSpeed;
         texture = new Texture(texturePath);
         textureRegion = new TextureRegion(texture);
-        if (xSpeed < 0)
-            textureRegion.flip(true, false);
+        if (xSpeed < 0) textureRegion.flip(true, false);
         this.width = (int) (texture.getWidth() * multiplier);
         this.height = (int) (texture.getHeight() * multiplier);
         if (deathAnimation != null) {
@@ -77,9 +76,9 @@ public abstract class EnemyObjects {
     }
 
     public void dispose() {
+        enemyObjects.remove(this);
         texture.dispose();
         textureRegion.getTexture().dispose();
-        enemyObjects.remove(this);
     }
 
     public void update(float delta) {
@@ -88,10 +87,8 @@ public abstract class EnemyObjects {
             xSpeed *= -1;
             textureRegion.flip(true, false);
         }
-        if (x <= 0)
-            x = 0;
-        if (x >= Gdx.graphics.getWidth() - width)
-            x = Gdx.graphics.getWidth() - width;
+        if (x <= 0) x = 0;
+        if (x >= Gdx.graphics.getWidth() - width) x = Gdx.graphics.getWidth() - width;
     }
 
     public TextureRegion getTextureRegion() {
@@ -107,15 +104,20 @@ public abstract class EnemyObjects {
             dispose();
             return;
         }
+        x += width / 2;
+        y += height / 2;
         textureRegion = new TextureRegion((Texture) fireTexture.getKeyFrame(explosionTimer));
+        width = textureRegion.getRegionWidth() / 2;
+        height = textureRegion.getRegionHeight() / 2;
+        x -= width / 2;
+        y -= height / 2;
         xSpeed = 0;
         isExploded = true;
     }
 
     public void updateExplosionTimer(float delta) {
         explosionTimer += delta;
-        if (explosionTimer >= 1)
-            dispose();
+        if (explosionTimer >= 1) dispose();
         textureRegion = new TextureRegion((Texture) fireTexture.getKeyFrame(explosionTimer));
     }
 

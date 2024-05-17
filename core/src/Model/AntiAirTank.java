@@ -28,7 +28,7 @@ public class AntiAirTank extends EnemyObjects {
             xIsLessThanAirplane = false;
         }
 
-        shootBullet(x, y , width, height);
+        if (!isExploded) shootBullet(x, y, width, height);
     }
 
     public static void shootBullet(float x, float y, int width, int height) {

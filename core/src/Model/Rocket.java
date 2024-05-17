@@ -1,13 +1,16 @@
 package Model;
 
+import Controller.GameUtility;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 
+import java.nio.channels.MulticastChannel;
 import java.util.ArrayList;
 
 public class Rocket {
     private static Rocket rocketInstance;
     private static ArrayList<Rocket> clusterInstance;
+    private static Rocket nuclearRocketInstance;
     private float x;
     private float y;
     private int width;
@@ -56,8 +59,22 @@ public class Rocket {
         return cluster;
     }
 
+    public static Rocket spawnNuclearRocket() {
+        Rocket rocket = new Rocket(0, 0);
+        rocket.texture = new Animation<>(0.1f, new Texture("sam.png"));
+        rocket.texture.setPlayMode(Animation.PlayMode.LOOP);
+        nuclearRocketInstance = rocket;
+        rocket.setHeight(rocket.getTexture().getKeyFrame(0).getHeight() * 2);
+        rocket.setWidth(rocket.getTexture().getKeyFrame(0).getWidth() * 2);
+        return rocket;
+    }
+
     public static void setRocket(Rocket rocket) {
         Rocket.rocketInstance = rocket;
+    }
+
+    public static Rocket getNuclearRocket() {
+        return nuclearRocketInstance;
     }
 
     public float getX() {
@@ -99,6 +116,8 @@ public class Rocket {
     public void dispose() {
         if (this == rocketInstance)
             rocketInstance = null;
+        if (this == nuclearRocketInstance)
+            nuclearRocketInstance = null;
         if (clusterInstance != null)
             clusterInstance.remove(this);
     }
@@ -117,10 +136,16 @@ public class Rocket {
 
     public void setExploded() {
         this.texture = getExplosionAnimation();
+        GameUtility.playExplosionMusic();
         this.x += this.width / 2;
         this.y += this.height / 2;
-        this.width = texture.getKeyFrame(0).getWidth() * 2;
-        this.height = texture.getKeyFrame(0).getHeight() * 2;
+        if (this == nuclearRocketInstance) {
+            this.width = texture.getKeyFrame(0).getWidth() * 5;
+            this.height = texture.getKeyFrame(0).getHeight() * 5;
+        } else {
+            this.width = texture.getKeyFrame(0).getWidth() * 2;
+            this.height = texture.getKeyFrame(0).getHeight() * 2;
+        }
         this.x -= this.width / 2;
         this.y -= this.height / 2;
         if (y < 170)
@@ -159,7 +184,10 @@ public class Rocket {
     }
 
     public Animation<Texture> getExplosionAnimation() {
-        return new Animation<>(0.1f, new Texture("bigblast1.png"), new Texture("bigblast2.png"), new Texture("bigblast3.png"), new Texture("bigblast4.png"));
+        if (this == nuclearRocketInstance) {
+            return new Animation<>(0.1f, new Texture("nuketop1.png"), new Texture("nuketop3.png"), new Texture("nuketop4.png"));
+        } else
+            return new Animation<>(0.1f, new Texture("bigblast1.png"), new Texture("bigblast2.png"), new Texture("bigblast3.png"), new Texture("bigblast4.png"));
     }
 
     public float getElapsedTime() {

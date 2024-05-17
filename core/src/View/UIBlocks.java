@@ -50,6 +50,9 @@ public class UIBlocks {
             case "SettingsScreen":
                 screen = new SettingsScreen();
                 break;
+            case "ScoreBoardScreen":
+                screen = new ScoreBoardScreen();
+                break;
             default:
                 return;
         }
@@ -58,10 +61,8 @@ public class UIBlocks {
         textButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (screen == null)
-                    Gdx.app.exit();
-                else
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(screen);
+                if (screen == null) Gdx.app.exit();
+                else ((Game) Gdx.app.getApplicationListener()).setScreen(screen);
             }
         });
     }

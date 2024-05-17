@@ -1,6 +1,7 @@
 package View;
 
 import Controller.DataBaseCommands;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -8,9 +9,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class MainMenuGameScreen implements Screen {
     Stage stage;
@@ -26,7 +30,18 @@ public class MainMenuGameScreen implements Screen {
         root.setFillParent(true);
         stage.addActor(root);
         UIBlocks.navigationTextButtonMaker("New Game", skin, root, "FirstGameScreen");
+        if (!DataBaseCommands.getUsername().equals("Guest")) {
+            TextButton continueGame = UIBlocks.textButtonMaker("Continue Game", skin, root);
+            continueGame.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    DataBaseCommands.loadGame();
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(new FirstGameScreen());
+                }
+            });
+        }
         UIBlocks.navigationTextButtonMaker("Profile Menu", skin, root, "ProfileMenuScreen");
+        UIBlocks.navigationTextButtonMaker("ScoreBoard", skin, root, "ScoreBoardScreen");
         UIBlocks.navigationTextButtonMaker("Settings", skin, root, "SettingsScreen");
         UIBlocks.navigationTextButtonMaker("Exit", skin, root, "Exit");
 

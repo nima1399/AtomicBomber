@@ -1,11 +1,11 @@
 package Model;
 
+import Controller.GameUtility;
 import View.AfterGameScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
 public class Airplane {
@@ -20,11 +20,13 @@ public class Airplane {
     private float xSpeed = 0;
     private float ySpeed = 0;
     private int hp = 2;
+    private int kills = 0;
     private boolean isExploded = false;
     private float explosionTimer = 0;
     private int totalShots = 0;
     private int successfulShots = 0;
     private int clusterShots = 0;
+    private int nuclearShots = 0;
     private boolean faceRight = true;
 
     public Airplane() {
@@ -82,7 +84,8 @@ public class Airplane {
     public void loadTexture() {
         planeTexture = new Animation<>(1f, new Texture("plane.png"));
         texture = planeTexture;
-        explodedTexture = new Animation<>(0.4f, new Texture("fire1.png"), new Texture("fire2.png"), new Texture("fire3.png"));
+        explodedTexture = new Animation<>(0.05f, new Texture("0.5.png"), new Texture("2.png"), new Texture("3.png"), new Texture("4.png"), new Texture("5.png"), new Texture("6.png"), new Texture("7.png"), new Texture("8.png"));
+        explodedTexture.setPlayMode(Animation.PlayMode.LOOP);
     }
 
     public float getXSpeed() {
@@ -118,9 +121,14 @@ public class Airplane {
     }
 
     public void setExploded() {
+        x += width / 2;
+        y += height / 2;
         texture = explodedTexture;
-        width = texture.getKeyFrame(0).getWidth() * 5;
-        height = texture.getKeyFrame(0).getHeight() * 5;
+        GameUtility.playExplosionMusic();
+        width = texture.getKeyFrame(0).getWidth() / 2;
+        height = texture.getKeyFrame(0).getHeight() / 2;
+        x -= width / 2;
+        y -= height / 2;
         xSpeed = 0;
         ySpeed = 0;
         isExploded = true;
@@ -183,4 +191,19 @@ public class Airplane {
         }
     }
 
+    public int getNuclearShots() {
+        return nuclearShots;
+    }
+
+    public void setNuclearShots(int nuke) {
+        nuclearShots = nuke;
+    }
+
+    public void setKills(int kills) {
+        this.kills = kills;
+    }
+
+    public int getKills() {
+        return kills;
+    }
 }

@@ -1,6 +1,5 @@
 package Model;
 
-import Controller.DataBaseCommands;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -31,12 +30,12 @@ public class FreezeBar {
     }
 
     public void update(float delta) {
-        int diff = DataBaseCommands.getKills() - lastKillCount;
-        lastKillCount = DataBaseCommands.getKills();
+        int diff = Airplane.getAirplane().getKills() - lastKillCount;
+        lastKillCount = Airplane.getAirplane().getKills();
         if (!isFreeze) {
             if (diff > 0) {
                 float oldWidth = freezeBarWidth;
-                freezeBarWidth += diff * 10;
+                freezeBarWidth += diff * 30;
                 if (freezeBarWidth > 500) {
                     freezeBarWidth = 500;
                 }
@@ -64,5 +63,13 @@ public class FreezeBar {
 
     public static FreezeBar getFreezeBar() {
         return freezeBarInstance;
+    }
+
+    public float getFreezeBarWidth() {
+        return this.freezeBarWidth;
+    }
+
+    public void setFreezeBarWidth(float width) {
+        freezeBarWidth = width;
     }
 }
