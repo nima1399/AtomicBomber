@@ -5,16 +5,16 @@ import Controller.GameWaves;
 
 public class Score {
     private static Score loggedInSaveScore = null;
-    private String username;
-    private int kills = 0;
-    private int hp = 2;
-    private int clusterBombs = 0;
-    private int nukes = 0;
-    private float freezeBarWidth = 0;
-    private int wave = 0;
-    private int difficulty = 1;
-    private int totalShots = 0;
-    private int successfulShots = 0;
+    private final String username;
+    private final int kills;
+    private final int hp;
+    private final int clusterBombs;
+    private final int nukes;
+    private final float freezeBarWidth;
+    private final int wave;
+    private final int difficulty;
+    private final int totalShots;
+    private final int successfulShots;
 
     public Score() {
         username = DataBaseCommands.getUsername();
@@ -24,7 +24,7 @@ public class Score {
         clusterBombs = airplane.getClusterShots();
         nukes = airplane.getNuclearShots();
         freezeBarWidth = FreezeBar.getFreezeBar().getFreezeBarWidth();
-        wave = GameWaves.getGameWaves().getWave();
+        wave = GameWaves.getWave();
         difficulty = DataBaseCommands.getDifficulty();
         totalShots = airplane.getTotalShots();
         successfulShots = airplane.getSuccessfulShots();

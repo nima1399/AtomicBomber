@@ -7,7 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -17,7 +16,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.util.ArrayList;
 
 public class ScoreBoardScreen implements Screen {
-    SpriteBatch batch;
     Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
     Stage stage = new Stage(new ScreenViewport());
     Label title = new Label("Score Board", skin);
@@ -114,7 +112,7 @@ public class ScoreBoardScreen implements Screen {
         rank = 1;
         for (ScoreBoardScore user : users) {
             Label label = new Label(user.getUsername() + " : " + user.getAccuracy(), skin);
-
+            labelColoring(label, rank, accuracyBoard);
             if (rank == 10) {
                 break;
             }

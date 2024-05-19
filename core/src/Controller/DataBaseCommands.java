@@ -42,7 +42,6 @@ public class DataBaseCommands {
     }
 
     public static void logout() {
-        System.out.println("hhhjkgj");
         CurrentUser.setUsername("Guest");
     }
 
@@ -105,7 +104,6 @@ public class DataBaseCommands {
         String currentUsername = CurrentUser.getUsername();
         userPref.remove(currentUsername);
         userPref.flush();
-        System.out.println("sadasdasd");
         CurrentUser.setUsername("Guest");
     }
 
@@ -206,7 +204,9 @@ public class DataBaseCommands {
         new Score(kills, hp, clusterBombs, nukes, freezeBarWidth, wave, difficulty, totalShots, successfulShots);
         Airplane airplane = Airplane.getAirplane();
         if (airplane == null) airplane = new Airplane();
-        GameWaves.getGameWaves().setWave(wave);
+        if (GameWaves.getGameWaves() == null)
+            new GameWaves();
+        GameWaves.setWave(wave);
         airplane.setKills(kills);
         airplane.setHp(hp);
         airplane.setClusterShots(clusterBombs);
@@ -214,6 +214,8 @@ public class DataBaseCommands {
         airplane.setTotalShots(totalShots);
         airplane.setSuccessfulShots(successfulShots);
 
+        if (FreezeBar.getFreezeBar() == null)
+            new FreezeBar();
         FreezeBar.getFreezeBar().setFreezeBarWidth(freezeBarWidth);
     }
 
@@ -235,12 +237,10 @@ public class DataBaseCommands {
     }
 
     public static ArrayList<ScoreBoardScore> getUsersList() {
-//        Preferences usersListPref = Gdx.app.getPreferences("UsersList");
         ArrayList<ScoreBoardScore> usersList = new ArrayList<>();
         for (int i = 0; i < usersListPref.getInteger("usersCount", 0); i++) {
             Preferences saveScore = Gdx.app.getPreferences("saveScore-" + usersListPref.getString(String.valueOf(i)));
             String username = usersListPref.getString(String.valueOf(i));
-//            Preferences userPref = Gdx.app.getPreferences("Users");
             if (userPref.getString(username, "userNotFound").equals("userNotFound")) {
                 continue;
             }

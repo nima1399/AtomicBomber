@@ -41,9 +41,8 @@ public class FirstGameScreen implements Screen {
         airplane.setWidth(airplane.getTexture().getWidth() * 5);
         DataBaseCommands.loadGame();
         if (gameWaves == null) gameWaves = new GameWaves();
-        if (gameWaves.getWave() == 0 || (Score.getLoggedInSaveScore() != null && gameWaves.getWave() == Score.getLoggedInSaveScore().getWave()))
+        if (GameWaves.getWave() == 0 || (Score.getLoggedInSaveScore() != null && GameWaves.getWave() == Score.getLoggedInSaveScore().getWave()))
             gameWaves.goToNextWave();
-        else System.out.println(gameWaves.getWave() + " " + Score.getLoggedInSaveScore().getWave());
         font = new BitmapFont();
         font.setColor(Color.WHITE);
         font.getData().setScale(5);
@@ -62,7 +61,7 @@ public class FirstGameScreen implements Screen {
         if (airplane.getIsExploded()) {
             airplane.updateExplosionTimer(delta);
         }
-        font.draw(batch, "Kills: " + Airplane.getAirplane().getKills() + "\nCluster: " + airplane.getClusterShots() + "\nNuke: " + airplane.getNuclearShots() + "\nWave: " + GameWaves.getGameWaves().getWave(), 50, Gdx.graphics.getHeight() - 150);
+        font.draw(batch, "Kills: " + Airplane.getAirplane().getKills() + "\nCluster: " + airplane.getClusterShots() + "\nNuke: " + airplane.getNuclearShots() + "\nWave: " + GameWaves.getWave(), 50, Gdx.graphics.getHeight() - 150);
         if (waveFinished) {
             font.draw(batch, "Accuracy: " + airplane.getAccuracy() + "%", 50, Gdx.graphics.getHeight() - 50);
             waveFinishedTimer += delta;
@@ -91,7 +90,7 @@ public class FirstGameScreen implements Screen {
             batch.draw(mig.getTextureRegion(), mig.getX(), mig.getY(), mig.getWidth(), mig.getHeight());
             if (!isFreeze) mig.update(delta);
             enemyObjectsExist = true;
-        } else if (GameWaves.getGameWaves().getWave() == 3 && !isFreeze) {
+        } else if (GameWaves.getWave() == 3 && !isFreeze) {
             timePassed += delta;
             if (timePassed >= migTime) {
                 new Mig(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 2, -200, "mig1.png");

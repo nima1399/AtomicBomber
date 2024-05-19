@@ -25,7 +25,7 @@ public class MainMenuGameScreen implements Screen {
     @Override
     public void show() {
         stage = new Stage();
-        if (GameWaves.getGameWaves() != null) GameWaves.getGameWaves().setWave(0);
+        if (GameWaves.getGameWaves() != null) GameWaves.setWave(0);
         Gdx.input.setInputProcessor(stage);
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
         Table root = new Table();
@@ -37,7 +37,6 @@ public class MainMenuGameScreen implements Screen {
             continueGame.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    DataBaseCommands.loadGame();
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new FirstGameScreen());
                 }
             });

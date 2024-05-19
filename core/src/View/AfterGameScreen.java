@@ -37,7 +37,7 @@ public class AfterGameScreen implements Screen {
             hasWon = "Game Lost";
         }
         UIBlocks.textButtonMaker(hasWon, skin, root);
-        UIBlocks.textButtonMaker("Last Wave: " + GameWaves.getGameWaves().getWave(), skin, root);
+        UIBlocks.textButtonMaker("Last Wave: " + GameWaves.getWave(), skin, root);
         UIBlocks.textButtonMaker("Kills: " + Airplane.getAirplane().getKills(), skin, root);
         UIBlocks.textButtonMaker("Accuracy: " + Airplane.getAirplane().getAccuracy() + "%", skin, root);
         TextButton exit = UIBlocks.textButtonMaker("Go Back To Main-menu", skin, root);

@@ -7,7 +7,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 
 public class GameWaves {
-    private int wave = 0;
+    private static int wave = 0;
     private static GameWaves gameWaves;
 
     public GameWaves() {
@@ -18,23 +18,23 @@ public class GameWaves {
         return gameWaves;
     }
 
-    public int getWave() {
+    public static int getWave() {
         return wave;
     }
 
-    public void setWave(int wave) {
-        this.wave = wave;
+    public static void setWave(int number) {
+        wave = number;
     }
 
     public void spawnEnemies() {
-        new Tank((float) (Math.random() * Gdx.graphics.getWidth() - 300), 70f, DataBaseCommands.getDifficulty());
-        new Tank((float) (Math.random() * Gdx.graphics.getWidth() - 300), -70f, DataBaseCommands.getDifficulty());
-        new Tank((float) (Math.random() * Gdx.graphics.getWidth() - 300), 70f, DataBaseCommands.getDifficulty());
-        new Building((float) (Math.random() * Gdx.graphics.getWidth() - 300));
-        new Bunker((float) (Math.random() * Gdx.graphics.getWidth() - 300));
-        new Truck((float) (Math.random() * Gdx.graphics.getWidth() - 300), 100f);
-        new Truck((float) (Math.random() * Gdx.graphics.getWidth() - 300), -100f);
-        new Tree((float) (Math.random() * Gdx.graphics.getWidth() - 300));
+        new Tank((float) getX(), 70f, DataBaseCommands.getDifficulty());
+        new Tank((float) getX(), -70f, DataBaseCommands.getDifficulty());
+        new Tank((float) getX(), 70f, DataBaseCommands.getDifficulty());
+        new Building((float) getX());
+        new Bunker((float) getX());
+        new Truck((float) getX(), 100f);
+        new Truck((float) getX(), -100f);
+        new Tree((float) getX());
     }
 
     public void goToNextWave() {
@@ -50,7 +50,7 @@ public class GameWaves {
             case 2:
                 spawnEnemies();
                 FirstGameScreen.setWaveFinished();
-                new AntiAirTank((float) (Math.random() * Gdx.graphics.getWidth() - 300), 170, 70f, "zsu57.png");
+                new AntiAirTank((float) getX(), 170, 70f, "zsu57.png");
                 break;
             case 3:
                 spawnEnemies();
@@ -60,5 +60,12 @@ public class GameWaves {
                 wave = 3;
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new AfterGameScreen());
         }
+    }
+
+    private double getX() {
+        double result = Math.random() * Gdx.graphics.getWidth();
+        if (result < 200) result += 700;
+        if (result > Gdx.graphics.getWidth() - 200) result -= 800;
+        return result;
     }
 }

@@ -62,9 +62,9 @@ public class UIBlocks {
                     default:
                         return;
                 }
-
-                if (eventListenerMenu.equals("DeleteAccount"))
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(screen);
+                if (screen == null)
+                    Gdx.app.exit();
+                ((Game) Gdx.app.getApplicationListener()).setScreen(screen);
             }
         });
     }
