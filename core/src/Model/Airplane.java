@@ -27,7 +27,6 @@ public class Airplane {
     private int successfulShots = 0;
     private int clusterShots = 0;
     private int nuclearShots = 0;
-    private boolean faceRight = true;
 
     public Airplane() {
         Airplane.airplane = this;
@@ -73,7 +72,7 @@ public class Airplane {
         return texture.getKeyFrame(explosionTimer);
     }
 
-    public static Animation getExplodedAnimation() {
+    public static Animation<Texture> getExplodedAnimation() {
         return airplane.explodedTexture;
     }
 
@@ -84,7 +83,7 @@ public class Airplane {
     public void loadTexture() {
         planeTexture = new Animation<>(1f, new Texture("plane.png"));
         texture = planeTexture;
-        explodedTexture = new Animation<>(0.05f, new Texture("0.5.png"), new Texture("2.png"), new Texture("3.png"), new Texture("4.png"), new Texture("5.png"), new Texture("6.png"), new Texture("7.png"), new Texture("8.png"));
+        explodedTexture = new Animation<>(0.05f, new Texture("1.png"), new Texture("2.png"), new Texture("3.png"), new Texture("4.png"), new Texture("5.png"), new Texture("6.png"), new Texture("7.png"), new Texture("8.png"));
         explodedTexture.setPlayMode(Animation.PlayMode.LOOP);
     }
 
@@ -163,14 +162,6 @@ public class Airplane {
 
     public void setClusterShots(int clusterShots) {
         this.clusterShots = clusterShots;
-    }
-
-    public boolean getFaceRight() {
-        return faceRight;
-    }
-
-    public void setFaceRight(boolean faceRight) {
-        this.faceRight = faceRight;
     }
 
     public void updateExplosionTimer(float delta) {

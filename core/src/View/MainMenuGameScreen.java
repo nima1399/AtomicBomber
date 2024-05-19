@@ -1,6 +1,7 @@
 package View;
 
 import Controller.DataBaseCommands;
+import Controller.GameWaves;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -24,6 +25,7 @@ public class MainMenuGameScreen implements Screen {
     @Override
     public void show() {
         stage = new Stage();
+        if (GameWaves.getGameWaves() != null) GameWaves.getGameWaves().setWave(0);
         Gdx.input.setInputProcessor(stage);
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
         Table root = new Table();

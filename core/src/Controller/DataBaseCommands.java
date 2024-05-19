@@ -1,22 +1,22 @@
 package Controller;
 
-import Model.Airplane;
-import Model.FreezeBar;
-import Model.Score;
-import Model.ScoreBoardScore;
+import Model.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
 import java.util.ArrayList;
 
 public class DataBaseCommands {
+    static Preferences userPref = Gdx.app.getPreferences("Users");
+    static Preferences usersListPref = Gdx.app.getPreferences("UsersList");
+    static Preferences avatarPref = Gdx.app.getPreferences("Avatars");
+    static Preferences difficultyPref = Gdx.app.getPreferences("Difficulty");
+    static Preferences controlsPref = Gdx.app.getPreferences("Controls");
+
     public static String login(String username, String password) {
-        Preferences userPref = Gdx.app.getPreferences("Users");
         String savedPassword = userPref.getString(username, "userNotFound");
         if (savedPassword.equals(password)) {
-            Preferences currentUserPref = Gdx.app.getPreferences("CurrentUser");
-            currentUserPref.putString("currentUser", username);
-            currentUserPref.flush();
+            CurrentUser.setUsername(username);
             return "loginSuccess";
         } else if (savedPassword.equals("userNotFound")) {
             return "userNotFound";
@@ -26,10 +26,8 @@ public class DataBaseCommands {
     }
 
     public static String register(String username, String password) {
-        Preferences userPref = Gdx.app.getPreferences("Users");
         String savedPassword = userPref.getString(username, "userNotFound");
         if (savedPassword.equals("userNotFound")) {
-            Preferences usersListPref = Gdx.app.getPreferences("UsersList");
             int usersCount = usersListPref.getInteger("usersCount", 0);
             usersListPref.putInteger("usersCount", usersCount + 1);
             usersListPref.putString(String.valueOf(usersCount), username);
@@ -44,36 +42,27 @@ public class DataBaseCommands {
     }
 
     public static void logout() {
-        Preferences userPref = Gdx.app.getPreferences("CurrentUser");
-        userPref.remove("currentUser");
-        userPref.flush();
+        System.out.println("hhhjkgj");
+        CurrentUser.setUsername("Guest");
     }
 
     public static String changeUserNameAndPassword(String newUsername, String newPassword) {
-        Preferences userPref = Gdx.app.getPreferences("Users");
-        Preferences currentUserPref = Gdx.app.getPreferences("CurrentUser");
-        String currentUsername = currentUserPref.getString("currentUser", "Guest");
+        String currentUsername = CurrentUser.getUsername();
         if (userPref.contains(newUsername)) {
             return "userExists";
         } else {
             userPref.remove(currentUsername);
             userPref.putString(newUsername, newPassword);
             userPref.flush();
-            currentUserPref.remove("currentUser");
-            currentUserPref.putString("currentUser", newUsername);
-            currentUserPref.flush();
-            // change username for all other preferences too
-            Preferences avatarPref = Gdx.app.getPreferences("Avatars");
+            CurrentUser.setUsername(newUsername);
             String avatar = avatarPref.getString(currentUsername, "avatar1.png");
             avatarPref.remove(currentUsername);
             avatarPref.putString(newUsername, avatar);
             avatarPref.flush();
-            Preferences difficultyPref = Gdx.app.getPreferences("Difficulty");
             String difficulty = difficultyPref.getString(currentUsername, "easy");
             difficultyPref.remove(currentUsername);
             difficultyPref.putString(newUsername, difficulty);
             difficultyPref.flush();
-            Preferences controlsPref = Gdx.app.getPreferences("Controls");
             String controls = controlsPref.getString(currentUsername, "arrows");
             controlsPref.remove(currentUsername);
             controlsPref.putString(newUsername, controls);
@@ -113,48 +102,37 @@ public class DataBaseCommands {
     }
 
     public static void deleteAccount() {
-        Preferences userPref = Gdx.app.getPreferences("Users");
-        Preferences currentUserPref = Gdx.app.getPreferences("CurrentUser");
-        String currentUsername = currentUserPref.getString("currentUser", "Guest");
+        String currentUsername = CurrentUser.getUsername();
         userPref.remove(currentUsername);
         userPref.flush();
-        currentUserPref.remove("currentUser");
-        currentUserPref.flush();
+        System.out.println("sadasdasd");
+        CurrentUser.setUsername("Guest");
     }
 
     public static String getAvatar() {
-        Preferences currentUserPref = Gdx.app.getPreferences("CurrentUser");
-        Preferences avatarPref = Gdx.app.getPreferences("Avatars");
-        String currentUsername = currentUserPref.getString("currentUser", "Guest");
+        String currentUsername = CurrentUser.getUsername();
         return avatarPref.getString(currentUsername, "avatar1.png");
     }
 
     public static void setAvatar(String avatar) {
-        Preferences currentUserPref = Gdx.app.getPreferences("CurrentUser");
-        String currentUsername = currentUserPref.getString("currentUser", "Guest");
-        Preferences avatarPref = Gdx.app.getPreferences("Avatars");
+        String currentUsername = CurrentUser.getUsername();
         avatarPref.putString(currentUsername, avatar);
         avatarPref.flush();
     }
 
     public static void getRandomAvatar() {
-        Preferences currentUserPref = Gdx.app.getPreferences("CurrentUser");
-        Preferences avatarPref = Gdx.app.getPreferences("Avatars");
-        String currentUsername = currentUserPref.getString("currentUser", "Guest");
+        String currentUsername = CurrentUser.getUsername();
         int random = (int) (Math.random() * 3) + 1;
         avatarPref.putString(currentUsername, "avatar" + random + ".png");
         avatarPref.flush();
     }
 
     public static String getUsername() {
-        Preferences currentUserPref = Gdx.app.getPreferences("CurrentUser");
-        return currentUserPref.getString("currentUser", "Guest");
+        return CurrentUser.getUsername();
     }
 
     public static int getDifficulty() {
-        Preferences currentUserPref = Gdx.app.getPreferences("CurrentUser");
-        String currentUsername = currentUserPref.getString("currentUser", "Guest");
-        Preferences difficultyPref = Gdx.app.getPreferences("Difficulty");
+        String currentUsername = CurrentUser.getUsername();
         String difficulty = difficultyPref.getString(currentUsername, "easy");
         switch (difficulty) {
             case "easy":
@@ -167,25 +145,19 @@ public class DataBaseCommands {
     }
 
     public static void setDifficulty(String difficulty) {
-        Preferences currentUserPref = Gdx.app.getPreferences("CurrentUser");
-        String currentUsername = currentUserPref.getString("currentUser", "Guest");
-        Preferences difficultyPref = Gdx.app.getPreferences("Difficulty");
+        String currentUsername = CurrentUser.getUsername();
         difficultyPref.putString(currentUsername, difficulty);
         difficultyPref.flush();
     }
 
     public static void setControls(String controls) {
-        Preferences currentUserPref = Gdx.app.getPreferences("CurrentUser");
-        String currentUsername = currentUserPref.getString("currentUser", "Guest");
-        Preferences controlsPref = Gdx.app.getPreferences("Controls");
+        String currentUsername = CurrentUser.getUsername();
         controlsPref.putString(currentUsername, controls);
         controlsPref.flush();
     }
 
     public static String getControls() {
-        Preferences currentUserPref = Gdx.app.getPreferences("CurrentUser");
-        String currentUsername = currentUserPref.getString("currentUser", "Guest");
-        Preferences controlsPref = Gdx.app.getPreferences("Controls");
+        String currentUsername = CurrentUser.getUsername();
         return controlsPref.getString(currentUsername, "arrows");
     }
 
@@ -263,12 +235,12 @@ public class DataBaseCommands {
     }
 
     public static ArrayList<ScoreBoardScore> getUsersList() {
-        Preferences usersListPref = Gdx.app.getPreferences("UsersList");
+//        Preferences usersListPref = Gdx.app.getPreferences("UsersList");
         ArrayList<ScoreBoardScore> usersList = new ArrayList<>();
         for (int i = 0; i < usersListPref.getInteger("usersCount", 0); i++) {
             Preferences saveScore = Gdx.app.getPreferences("saveScore-" + usersListPref.getString(String.valueOf(i)));
             String username = usersListPref.getString(String.valueOf(i));
-            Preferences userPref = Gdx.app.getPreferences("Users");
+//            Preferences userPref = Gdx.app.getPreferences("Users");
             if (userPref.getString(username, "userNotFound").equals("userNotFound")) {
                 continue;
             }

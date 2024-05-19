@@ -21,48 +21,50 @@ public class UIBlocks {
 
     public static void navigationTextButtonMaker(String text, Skin skin, Table root, String eventListenerMenu) {
         TextButton textButton = textButtonMaker(text, skin, root);
-        Screen screen;
-        switch (eventListenerMenu) {
-            case "FirstGameScreen":
-                screen = new FirstGameScreen();
-                break;
-            case "MainMenuGameScreen":
-                screen = new MainMenuGameScreen();
-                break;
-            case "Exit":
-                screen = null;
-                break;
-            case "ProfileMenuScreen":
-                screen = new ProfileMenuScreen();
-                break;
-            case "ChangeUsernameOrPassword":
-                screen = new ChangeUsernameOrPasswordScreen();
-                break;
-            case "DeleteAccount":
-                DataBaseCommands.deleteAccount();
-            case "Logout":
-                DataBaseCommands.logout();
-                screen = new LoginMenuScreen();
-                break;
-            case "AvatarMenu":
-                screen = new AvatarMenuScreen();
-                break;
-            case "SettingsScreen":
-                screen = new SettingsScreen();
-                break;
-            case "ScoreBoardScreen":
-                screen = new ScoreBoardScreen();
-                break;
-            default:
-                return;
-        }
-
-
         textButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (screen == null) Gdx.app.exit();
-                else ((Game) Gdx.app.getApplicationListener()).setScreen(screen);
+                Screen screen;
+                switch (eventListenerMenu) {
+                    case "FirstGameScreen":
+                        screen = new FirstGameScreen();
+                        break;
+                    case "MainMenuGameScreen":
+                        screen = new MainMenuGameScreen();
+                        break;
+                    case "Exit":
+                        screen = null;
+                        break;
+                    case "ProfileMenuScreen":
+                        screen = new ProfileMenuScreen();
+                        break;
+                    case "ChangeUsernameOrPassword":
+                        screen = new ChangeUsernameOrPasswordScreen();
+                        break;
+                    case "DeleteAccount":
+                        DataBaseCommands.deleteAccount();
+                        screen = new LoginMenuScreen();
+                        DataBaseCommands.logout();
+                        break;
+                    case "Logout":
+                        DataBaseCommands.logout();
+                        screen = new LoginMenuScreen();
+                        break;
+                    case "AvatarMenu":
+                        screen = new AvatarMenuScreen();
+                        break;
+                    case "SettingsScreen":
+                        screen = new SettingsScreen();
+                        break;
+                    case "ScoreBoardScreen":
+                        screen = new ScoreBoardScreen();
+                        break;
+                    default:
+                        return;
+                }
+
+                if (eventListenerMenu.equals("DeleteAccount"))
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(screen);
             }
         });
     }
